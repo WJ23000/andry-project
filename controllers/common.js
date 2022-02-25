@@ -24,24 +24,35 @@ class CommonController {
    *         schema:
    *           $ref: '#/definitions/registerAttribute'
    *     responses:
-   *       200:
+   *       4000200:
    *         description: 请求成功
-   *       500:
+   *       4000500:
    *         description: 请求失败
-   *       412:
+   *       4000412:
    *         description: 参数异常
    */
   static async register(ctx) {
     const data = ctx.request.body;
-    if (data.username && data.password) {
+    if (data.username && data.password && data.confirmPassword) {
+      if (data.password !== data.confirmPassword) {
+        ctx.exception("请检查密码和确认密码是否一致");
+        return;
+      }
+      const isRegisterUser = await CommonModel.isRegisterUser(data);
+      if (isRegisterUser) {
+        ctx.fail("用户已存在");
+        return;
+      }
       try {
         const result = await CommonModel.register(data);
-        ctx.success("注册成功", result);
+        const dataResult = JSON.parse(JSON.stringify(result));
+        delete dataResult.password;
+        ctx.success("注册成功", dataResult);
       } catch (err) {
         ctx.fail("注册失败", err);
       }
     } else {
-      ctx.exception("请检查用户名或密码是否输入！");
+      ctx.exception("参数异常，请检查！");
     }
   }
 

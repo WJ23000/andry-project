@@ -26,6 +26,19 @@ class CommonModel {
   }
 
   /**
+   * 注册(检查用户是否存在)
+   * @param data
+   * @returns {Promise<Model>}
+   */
+  static async isRegisterUser(data) {
+    return await user.findOne({
+      where: {
+        username: data.username,
+      },
+    });
+  }
+
+  /**
    * 登录
    * @param username
    * @returns {Promise<Model>}
