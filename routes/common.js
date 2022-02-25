@@ -3,7 +3,7 @@ const router = require("koa-router")();
 const CommonController = require("../controllers/common");
 
 
-router.prefix('/api')
+router.prefix('/service-common/api/v1')
 
 // 注册
 router.post("/register", CommonController.register);

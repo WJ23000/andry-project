@@ -2,7 +2,7 @@ const router = require("koa-router")();
 
 const UserController = require("../controllers/user");
 
-router.prefix("/api/user");
+router.prefix("/service-user/api/v1");
 
 // 创建单个用户-通过
 router.post("/create", UserController.createUser);

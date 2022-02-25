@@ -8,7 +8,11 @@ const CommonModel = require("../modules/common");
 
 async function checkToken(ctx, next) {
   const url = ctx.url.split("?")[0];
-  if (url === "/api/login" || url === "/api/register" || url === "/swagger") {
+  if (
+    url.includes("login") ||
+    url.includes("register") ||
+    url.includes("swagger")
+  ) {
     await next();
   } else {
     const accessToken = ctx.request.headers["authorization"];

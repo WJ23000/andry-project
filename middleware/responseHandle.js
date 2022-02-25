@@ -16,7 +16,7 @@ function responseHandle() {
     // 请求失败
     ctx.fail = (msg, data) => {
       ctx.body = {
-        code: 4000412,
+        code: 4000500,
         msg: msg || "fail",
         data: data || "",
       };
