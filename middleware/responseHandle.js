@@ -5,6 +5,7 @@
  */
 function responseHandle() {
   return async (ctx, next) => {
+    ctx.set("Content-Type", "application/json") // 以json格式返回数据
     // 请求成功
     ctx.success = (msg, data) => {
       ctx.body = {

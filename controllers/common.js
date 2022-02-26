@@ -44,10 +44,11 @@ class CommonController {
         return;
       }
       try {
-        const result = await CommonModel.register(data);
-        const dataResult = JSON.parse(JSON.stringify(result));
-        delete dataResult.password;
-        ctx.success("注册成功", dataResult);
+        const result = await CommonModel.register(data).then((res) => {
+          return res.toJSON();
+        });
+        delete result.password;
+        ctx.success("注册成功", result);
       } catch (err) {
         ctx.fail("注册失败", err);
       }
