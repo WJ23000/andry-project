@@ -20,7 +20,7 @@ router.post("/update", UserController.updateUser);
 router.post("/update/batch", UserController.updateUserBatch);
 
 // 根据id数组批量删除用户-通过
-router.post("/delete", UserController.deleteUser);
+router.post("/delete/batch", UserController.deleteUserBatch);
 
 // 根据id查询用户详情-通过
 router.get("/query/detail", UserController.getUserDetail);

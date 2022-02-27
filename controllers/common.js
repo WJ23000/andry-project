@@ -22,7 +22,7 @@ class CommonController {
    *       - name: body
    *         in: body
    *         schema:
-   *           $ref: '#/definitions/registerAttribute'
+   *           $ref: '#/definitions/loginRegister'
    *     responses:
    *       4000200:
    *         description: 请求成功
@@ -33,11 +33,7 @@ class CommonController {
    */
   static async register(ctx) {
     const data = ctx.request.body;
-    if (data.username && data.password && data.confirmPassword) {
-      if (data.password !== data.confirmPassword) {
-        ctx.exception("请检查密码和确认密码是否一致");
-        return;
-      }
+    if (data.username && data.password) {
       const isRegisterUser = await CommonModel.isRegisterUser(data);
       if (isRegisterUser) {
         ctx.fail("用户已存在");
@@ -61,8 +57,8 @@ class CommonController {
    * @swagger
    * /service-common/api/v1/login:
    *   post:
-   *     summary: 登录
-   *     description: 登录
+   *     summary: 用户登录
+   *     description: 用户登录
    *     tags:
    *       - common
    *     operationId: login
@@ -76,7 +72,7 @@ class CommonController {
    *       - name: body
    *         in: body
    *         schema:
-   *           $ref: '#/definitions/loginAttribute'
+   *           $ref: '#/definitions/loginRegister'
    *     responses:
    *       200:
    *         description: 请求成功
@@ -143,6 +139,56 @@ class CommonController {
 
   /**
    * @swagger
+   * /service-common/api/v1/update/pwd:
+   *   post:
+   *     summary: 修改用户密码
+   *     description: 修改用户密码
+   *     tags:
+   *       - common
+   *     operationId: updatePwd
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: body
+   *         in: body
+   *         schema:
+   *           $ref: '#/definitions/updatePassword'
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   */
+  static async updatePwd(ctx) {
+    const data = ctx.request.body;
+    if (data.username && data.password && data.newPassword) {
+      const isRegisterUser = await CommonModel.isRegisterUser(data);
+      if (!isRegisterUser) {
+        ctx.fail("用户不存在");
+        return;
+      }
+      try {
+        const result = await CommonModel.updatePwd(data).then((res) => {
+          return res.toJSON();
+        });
+        delete result.password;
+        ctx.success("修改密码成功", result);
+      } catch (err) {
+        ctx.fail("修改密码失败", err);
+      }
+    } else {
+      ctx.exception("参数异常，请检查！");
+    }
+  }
+
+  /**
+   * @swagger
    * /service-common/api/v1/refresh/token:
    *   get:
    *     summary: 刷新token
@@ -194,7 +240,7 @@ module.exports = CommonController;
  *     name: "Authorization"
  *     in: "header"
  * definitions:
- *   registerAttribute:
+ *   loginRegister:
  *     properties:
  *       username:
  *         type: "string"
@@ -202,15 +248,15 @@ module.exports = CommonController;
  *       password:
  *         type: "string"
  *         description: 密码
- *       confirmPassword:
- *         type: "string"
- *         description: 确认密码
- *   loginAttribute:
+ *   updatePassword:
  *     properties:
  *       username:
  *         type: "string"
  *         description: 用户名
  *       password:
  *         type: "string"
- *         description: 密码
+ *         description: 旧密码
+ *       newPassword:
+ *         type: "string"
+ *         description: 新密码
  */

@@ -14,7 +14,7 @@ const token_blacklist = require("../schema/token_blacklist")(
 
 class CommonModel {
   /**
-   * 注册
+   * 注册新用户
    * @param data
    * @returns {Promise<Model>}
    */
@@ -39,7 +39,7 @@ class CommonModel {
   }
 
   /**
-   * 登录
+   * 用户登录
    * @param username
    * @returns {Promise<Model>}
    */
@@ -61,6 +61,25 @@ class CommonModel {
     return await token_blacklist.create({
       token,
     });
+  }
+
+  /**
+   * 修改用户密码
+   * @param data
+   * @returns {Promise<*>}
+   */
+  static async updatePwd(data) {
+    return await user.update(
+      {
+        username: data.username,
+        password: data.password
+      },
+      {
+        where: {
+          username: data.username,
+        },
+      }
+    );
   }
 
   /**

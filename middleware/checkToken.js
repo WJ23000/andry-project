@@ -11,6 +11,7 @@ async function checkToken(ctx, next) {
   if (
     url.includes("login") ||
     url.includes("register") ||
+    url.includes("update/pwd") ||
     url.includes("swagger")
   ) {
     await next();

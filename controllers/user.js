@@ -1,13 +1,38 @@
 const UserModel = require("../modules/user");
 class UserController {
   /**
-   * 创建单个用户
-   * @param ctx
-   * @returns {Promise.<void>}
+   * @swagger
+   * /service-user/api/v1/create:
+   *   post:
+   *     summary: 创建用户
+   *     description: 创建用户
+   *     tags:
+   *       - user
+   *     operationId: create
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: body
+   *         in: body
+   *         schema:
+   *           $ref: '#/definitions/user'
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
    */
   static async createUser(ctx) {
     const data = ctx.request.body;
-    if (data.username && data.password && data.age && data.sex) {
+    if (data.username && data.password || data.age || data.sex) {
       try {
         // 创建用户
         const result = await UserModel.createUser(data);
@@ -22,9 +47,34 @@ class UserController {
   }
 
   /**
-   * 批量创建用户
-   * @param ctx
-   * @returns {Promise.<void>}
+   * @swagger
+   * /service-user/api/v1/create/batch:
+   *   post:
+   *     summary: 批量创建用户
+   *     description: 批量创建用户
+   *     tags:
+   *       - user
+   *     operationId: createUserBatch
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: body
+   *         in: body
+   *         schema:
+   *           $ref: '#/definitions/user'
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
    */
   static async createUserBatch(ctx) {
     const data = ctx.request.body;
@@ -41,10 +91,36 @@ class UserController {
   }
 
   /**
-   * 查询用户列表
-   * @param ctx
-   * @param 不传参数默认查所有
-   * @returns {Promise.<void>}
+   * @swagger
+   * /service-user/api/v1/query/list:
+   *   get:
+   *     summary: 查询用户列表
+   *     description: 查询用户列表
+   *     tags:
+   *       - user
+   *     operationId: getUserList
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: pageNum
+   *         in: path
+   *         description: "页面页码"
+   *       - name: pageSize
+   *         in: path
+   *         description: "页面数量"
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
    */
   static async getUserList(ctx) {
     const query = ctx.query;
@@ -61,13 +137,38 @@ class UserController {
   }
 
   /**
-   * 根据id编辑单个用户
-   * @param ctx
-   * @returns {Promise.<void>}
+   * @swagger
+   * /service-user/api/v1/update:
+   *   post:
+   *     summary: 根据id编辑用户
+   *     description: 根据id编辑用户
+   *     tags:
+   *       - user
+   *     operationId: updateUser
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: body
+   *         in: body
+   *         schema:
+   *           $ref: '#/definitions/user'
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
    */
   static async updateUser(ctx) {
     const data = ctx.request.body;
-    if (data.id && data.username && data.password && data.age && data.sex) {
+    if (data.id && data.username && data.password || data.age || data.sex) {
       try {
         const result = await UserModel.updateUser(data);
         ctx.success("编辑用户成功", result);
@@ -80,9 +181,34 @@ class UserController {
   }
 
   /**
-   * 批量编辑用户
-   * @param ctx
-   * @returns {Promise.<void>}
+   * @swagger
+   * /service-user/api/v1/update/batch:
+   *   post:
+   *     summary: 批量编辑用户
+   *     description: 批量编辑用户
+   *     tags:
+   *       - user
+   *     operationId: updateUserBatch
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: body
+   *         in: body
+   *         schema:
+   *           $ref: '#/definitions/user'
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
    */
   static async updateUserBatch(ctx) {
     const data = ctx.request.body;
@@ -99,11 +225,36 @@ class UserController {
   }
 
   /**
-   * 根据id数组批量删除用户
-   * @param ctx
-   * @returns {Promise.<void>}
+   * @swagger
+   * /service-user/api/v1/delete/batch:
+   *   post:
+   *     summary: 根据id数组批量删除用户
+   *     description: 根据id数组批量删除用户
+   *     tags:
+   *       - user
+   *     operationId: deleteUserBatch
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: body
+   *         in: body
+   *         schema:
+   *           $ref: '#/definitions/user'
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
    */
-  static async deleteUser(ctx) {
+  static async deleteUserBatch(ctx) {
     const data = ctx.request.body;
     if (data.length > 0) {
       try {
@@ -122,9 +273,33 @@ class UserController {
   }
 
   /**
-   * 根据id查询用户详情
-   * @param ctx
-   * @returns {Promise.<void>}
+   * @swagger
+   * /service-user/api/v1/query/detail:
+   *   get:
+   *     summary: 根据id查询用户详情
+   *     description: 根据id查询用户详情
+   *     tags:
+   *       - user
+   *     operationId: getUserDetail
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     parameters:
+   *       - name: id
+   *         in: path
+   *         description: "用户id"
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
    */
   static async getUserDetail(ctx) {
     const query = ctx.query;
@@ -142,3 +317,30 @@ class UserController {
 }
 
 module.exports = UserController;
+
+/**
+ * @swagger
+ * definitions:
+ *   user:
+ *     properties:
+ *       username:
+ *         type: "string"
+ *         description: 用户名
+ *       password:
+ *         type: "string"
+ *         description: 密码
+ *       age:
+ *         type: "string"
+ *         description: 年龄
+ *       sex:
+ *         type: "string"
+ *         description: 性别
+ *   queryAttribute:
+ *     properties:
+ *       pageNum:
+ *         type: "string"
+ *         description: 页面页码
+ *       pageSize:
+ *         type: "string"
+ *         description: 页面数量
+ */
