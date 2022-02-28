@@ -3,7 +3,7 @@ const Router = require("koa-router");
 const cors = require("koa-cors");
 const responseHandle = require("../middleware/responseHandle");
 const checkToken = require("../middleware/checkToken");
-const swagger = require('../utils/swagger');
+const swagger = require('../middleware/swagger');
 const { koaSwagger } = require('koa2-swagger-ui');
 
 

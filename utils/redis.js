@@ -7,4 +7,5 @@ const config = {
   db: redisConfig.db,
 };
 const redis = new Redis(config);
+
 module.exports = redis;

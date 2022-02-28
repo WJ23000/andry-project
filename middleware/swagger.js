@@ -1,7 +1,7 @@
 const router = require("koa-router")();
 const swaggerJSDoc = require("swagger-jsdoc");
 const path = require("path");
-const getIpAddress = require("./os")
+const getIpAddress = require("../utils/os")
 
 const ip = getIpAddress()
 

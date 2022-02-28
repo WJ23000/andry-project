@@ -1,3 +1,4 @@
+const bcryptjs = require("bcryptjs");
 const CommonModel = require("../modules/common");
 const token = require("../utils/token");
 const redis = require("../utils/redis");
@@ -36,9 +37,11 @@ class CommonController {
     if (data.username && data.password) {
       const isRegisterUser = await CommonModel.isRegisterUser(data);
       if (isRegisterUser) {
-        ctx.fail("用户已存在");
+        ctx.success("用户已存在");
         return;
       }
+      // 密码加密
+      data.password = bcryptjs.hashSync(data.password, 10);
       try {
         const result = await CommonModel.register(data).then((res) => {
           return res.toJSON();
@@ -84,7 +87,22 @@ class CommonController {
   static async login(ctx) {
     const data = ctx.request.body;
     if (data.username && data.password) {
+      const isRegisterUser = await CommonModel.isRegisterUser(data);
+      if (!isRegisterUser) {
+        ctx.exception("用户不存在");
+        return;
+      }
+      // 密码比对(true为比对成功)
+      const comparePwd = bcryptjs.compareSync(
+        data.password,
+        isRegisterUser.password
+      );
+      if (!comparePwd) {
+        ctx.exception("密码不正确");
+        return;
+      }
       try {
+        data.password = isRegisterUser.password;
         const user = await CommonModel.login(data);
         // 存储token到redis之前将已存在的token移入黑名单
         const oldToken = await redis.get(data.username);
@@ -100,10 +118,10 @@ class CommonController {
         };
         ctx.success("查询成功", result);
       } catch (err) {
-        ctx.fail("登录失败", err);
+        ctx.fail("请检查用户名和密码是否正确");
       }
     } else {
-      ctx.exception("请检查用户名或密码是否正确！");
+      ctx.exception("参数异常，请检查！");
     }
   }
 
