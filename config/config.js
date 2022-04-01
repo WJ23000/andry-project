@@ -20,8 +20,15 @@ const redisConfig = {
   db: 0,
 };
 
+const qiniuConfig = {
+  accessKey: "TTxkwDx0Vs6u4b4XwNcPD7htXXhoSYC6TpLclkYV",
+  secretKey: "kS6qR6xsmiEK2bfNuLFLVVTSzONguK59gAlt-5Z8",
+  scope: "andry", // 空间名
+};
+
 module.exports = {
   dbConfig: dbConfig,
   jwtConfig: jwtConfig,
   redisConfig: redisConfig,
+  qiniuConfig: qiniuConfig,
 };

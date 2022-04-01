@@ -27,10 +27,13 @@
     "koa2-swagger-ui": "^5.2.0",
     "mysql": "^2.18.1",
     "mysql2": "^2.3.0",
+    "node-schedule": "^2.1.0",
     "pug": "^2.0.3",
+    "qiniu": "^7.4.0",
     "require-directory": "^2.1.1",
     "sequelize": "^6.6.5",
-    "swagger-jsdoc": "^6.1.0"
+    "swagger-jsdoc": "^6.1.0",
+    "uuid": "^8.3.2"
   },
   "devDependencies": {
     "nodemon": "^1.19.4"

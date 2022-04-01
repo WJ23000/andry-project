@@ -6,6 +6,7 @@ const { koaSwagger } = require("../public/swagger-ui");
 const swagger = require("../middleware/swagger");
 const responseHandle = require("../middleware/responseHandle");
 const checkToken = require("../middleware/checkToken");
+const schedule = require("../schedule/index");
 
 class InitManager {
   // 统一初始化(中间件加载顺序很重要)
@@ -17,6 +18,7 @@ class InitManager {
     InitManager.initResponseHandle();
     InitManager.initCheckToken();
     InitManager.initLoadRouters();
+    InitManager.initSchedule();
   }
 
   // cors解决跨域
@@ -31,7 +33,7 @@ class InitManager {
         multipart: true, // 支持文件上传
         formidable: {
           maxFileSize: 2 * 1024 * 1024, // 设置上传文件大小最大限制，默认2M
-          keepExtensions: true // 保持文件的后缀
+          keepExtensions: true, // 保持文件的后缀
         },
       })
     );
@@ -59,7 +61,7 @@ class InitManager {
   static initCheckToken() {
     InitManager.app.use(checkToken);
   }
-  
+
   // 路由自动注册
   static initLoadRouters() {
     // 获取路由目录的绝对路径
@@ -71,6 +73,11 @@ class InitManager {
         }
       },
     });
+  }
+
+  // 定时任务
+  static initSchedule() {
+    schedule();
   }
 }
 

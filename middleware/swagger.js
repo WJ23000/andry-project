@@ -1,9 +1,9 @@
 const router = require("koa-router")();
 const swaggerJSDoc = require("swagger-jsdoc");
 const path = require("path");
-const getIpAddress = require("../utils/os")
+const system = require("../utils/system");
 
-const ip = getIpAddress()
+const ip = system.getIpAddress();
 
 const swaggerDefinition = {
   info: {
@@ -13,7 +13,7 @@ const swaggerDefinition = {
       "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
   },
   host: ip + ":3000", // 想着改这里，如果不修改，那么接口文档访问地址为：localhost:3000/swagger
-  basePath: "/" // Base path (optional)
+  basePath: "/", // Base path (optional)
 };
 const options = {
   swaggerDefinition,
