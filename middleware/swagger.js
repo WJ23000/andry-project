@@ -13,17 +13,7 @@ const swaggerDefinition = {
       "This is a sample server Petstore server. You can find out more about Swagger at http://swagger.io or on irc.freenode.net, #swagger. For this sample, you can use the api key special-key to test the authorization filters.",
   },
   host: ip + ":3000", // 想着改这里，如果不修改，那么接口文档访问地址为：localhost:3000/swagger
-  basePath: "/", // Base path (optional)
-  schemes: ["http", "https"],
-  // securityDefinitions: {
-  //   apiKey: {
-  //     type: "apiKey",
-  //     in: "header",
-  //     name: "Authorization",
-  //     description: "Authorization format : Bearer {token}",
-  //   },
-  // },
-  // enableSecurity: true,
+  basePath: "/" // Base path (optional)
 };
 const options = {
   swaggerDefinition,

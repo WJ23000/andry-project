@@ -22,6 +22,7 @@ class CommonController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/loginRegister'
    *     responses:
@@ -37,15 +38,13 @@ class CommonController {
     if (data.username && data.password) {
       const isRegisterUser = await CommonModel.isRegisterUser(data);
       if (isRegisterUser) {
-        ctx.success("用户已存在");
+        ctx.exception("用户已存在");
         return;
       }
       // 密码加密
       data.password = bcryptjs.hashSync(data.password, 10);
       try {
-        const result = await CommonModel.register(data).then((res) => {
-          return res.toJSON();
-        });
+        const result = await CommonModel.register(data)
         delete result.password;
         ctx.success("注册成功", result);
       } catch (err) {
@@ -74,6 +73,7 @@ class CommonController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/loginRegister'
    *     responses:
@@ -102,8 +102,9 @@ class CommonController {
         return;
       }
       try {
-        data.password = isRegisterUser.password;
-        const user = await CommonModel.login(data);
+        data.password = isRegisterUser.password; // 加密后的密码
+        const user = await CommonModel.login(data)
+        delete user.password;
         // 存储token到redis之前将已存在的token移入黑名单
         const oldToken = await redis.get(data.username);
         if (oldToken) {
@@ -118,7 +119,7 @@ class CommonController {
         };
         ctx.success("查询成功", result);
       } catch (err) {
-        ctx.fail("请检查用户名和密码是否正确");
+        ctx.fail("登录失败", err);
       }
     } else {
       ctx.exception("参数异常，请检查！");
@@ -143,6 +144,12 @@ class CommonController {
   static async exitLogin(ctx) {
     const oldToken = ctx.request.headers["authorization"];
     if (oldToken) {
+      // 判断token是否有效（只校验token中是否包含用户信息）
+      const user = await token.verify(oldToken);
+      if (!user.id && !user.username) {
+        ctx.exception("用户不存在");
+        return;
+      }
       try {
         // 将传入token移入黑名单
         await CommonModel.createToken(oldToken);
@@ -173,6 +180,7 @@ class CommonController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/updatePassword'
    *     responses:
@@ -192,9 +200,7 @@ class CommonController {
         return;
       }
       try {
-        const result = await CommonModel.updatePwd(data).then((res) => {
-          return res.toJSON();
-        });
+        const result = await CommonModel.updatePwd(data)
         delete result.password;
         ctx.success("修改密码成功", result);
       } catch (err) {
@@ -214,6 +220,12 @@ class CommonController {
    *     tags:
    *       - common
    *     operationId: refreshToken
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
    *     responses:
    *       200:
    *         description: 请求成功
@@ -261,20 +273,20 @@ module.exports = CommonController;
  *   loginRegister:
  *     properties:
  *       username:
- *         type: "string"
+ *         type: string
  *         description: 用户名
  *       password:
- *         type: "string"
+ *         type: string
  *         description: 密码
  *   updatePassword:
  *     properties:
  *       username:
- *         type: "string"
+ *         type: string
  *         description: 用户名
  *       password:
- *         type: "string"
+ *         type: string
  *         description: 旧密码
  *       newPassword:
- *         type: "string"
+ *         type: string
  *         description: 新密码
  */

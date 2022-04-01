@@ -18,6 +18,7 @@ class UserController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/user'
    *     responses:
@@ -64,6 +65,7 @@ class UserController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/user'
    *     responses:
@@ -107,11 +109,15 @@ class UserController {
    *       - application/xml
    *     parameters:
    *       - name: pageNum
-   *         in: path
-   *         description: "页面页码"
+   *         in: query
+   *         type: number
+   *         required: false
+   *         description: 页面页码
    *       - name: pageSize
-   *         in: path
-   *         description: "页面数量"
+   *         in: query
+   *         type: number
+   *         required: false
+   *         description: 页面数量
    *     responses:
    *       4000200:
    *         description: 请求成功
@@ -154,6 +160,7 @@ class UserController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/user'
    *     responses:
@@ -198,6 +205,7 @@ class UserController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/user'
    *     responses:
@@ -242,6 +250,7 @@ class UserController {
    *     parameters:
    *       - name: body
    *         in: body
+   *         required: true
    *         schema:
    *           $ref: '#/definitions/user'
    *     responses:
@@ -289,8 +298,10 @@ class UserController {
    *       - application/xml
    *     parameters:
    *       - name: id
-   *         in: path
-   *         description: "用户id"
+   *         in: query
+   *         type: string
+   *         required: true
+   *         description: 用户id
    *     responses:
    *       4000200:
    *         description: 请求成功
@@ -324,23 +335,23 @@ module.exports = UserController;
  *   user:
  *     properties:
  *       username:
- *         type: "string"
+ *         type: string
  *         description: 用户名
  *       password:
- *         type: "string"
+ *         type: string
  *         description: 密码
  *       age:
- *         type: "string"
+ *         type: string
  *         description: 年龄
  *       sex:
- *         type: "string"
+ *         type: string
  *         description: 性别
- *   queryAttribute:
+ *   pagination:
  *     properties:
  *       pageNum:
- *         type: "string"
+ *         type: number
  *         description: 页面页码
  *       pageSize:
- *         type: "string"
+ *         type: number
  *         description: 页面数量
  */
