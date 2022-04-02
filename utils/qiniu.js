@@ -7,7 +7,7 @@ function uploadToQiniu(filePath, key) {
   const mac = new qiniu.auth.digest.Mac(accessKey, secretKey); // 生成上传凭证
   // 设置上传空间
   const options = {
-    scope: qiniuConfig.scope, 
+    scope: qiniuConfig.scope,
   };
   const putPolicy = new qiniu.rs.PutPolicy(options);
   // 生成上传token
@@ -26,7 +26,7 @@ function uploadToQiniu(filePath, key) {
       key,
       localFile,
       putExtra,
-      function (respErr, respBody, respInfo) {
+      (respErr, respBody, respInfo) => {
         if (respErr) {
           reject(respErr);
         }

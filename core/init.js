@@ -6,7 +6,7 @@ const { koaSwagger } = require("../public/swagger-ui");
 const swagger = require("../middleware/swagger");
 const responseHandle = require("../middleware/responseHandle");
 const checkToken = require("../middleware/checkToken");
-const schedule = require("../schedule/index");
+const scheduleTask = require("../schedule/index");
 
 class InitManager {
   // 统一初始化(中间件加载顺序很重要)
@@ -77,7 +77,7 @@ class InitManager {
 
   // 定时任务
   static initSchedule() {
-    schedule();
+    scheduleTask.taskDemo();
   }
 }
 
