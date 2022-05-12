@@ -15,6 +15,11 @@ npm start
 npm run build
 ```
 
+### pm2进程管理常用命令
+```
+设置Headers的authorization = 'Bearer ' + ${token}(登录接口会返回，Bearer后面加一个空格)
+```
+
 ### 前端使用token
 ```
 设置Headers的authorization = 'Bearer ' + ${token}(登录接口会返回，Bearer后面加一个空格)

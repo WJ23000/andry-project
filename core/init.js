@@ -18,7 +18,6 @@ class InitManager {
     InitManager.initResponseHandle();
     InitManager.initCheckToken();
     InitManager.initLoadRouters();
-    InitManager.initSchedule();
   }
 
   // cors解决跨域
@@ -75,10 +74,6 @@ class InitManager {
     });
   }
 
-  // 定时任务
-  static initSchedule() {
-    scheduleTask.taskDemo();
-  }
 }
 
 module.exports = InitManager;

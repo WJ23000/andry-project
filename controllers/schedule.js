@@ -1,14 +1,14 @@
 const scheduleTask = require("../schedule/index");
 
-class UploadController {
+class ScheduleController {
   /**
    * @swagger
-   * /service-schedule/api/v1/cancel/taskDemo:
+   * /service-schedule/api/v1/start/task/one:
    *   get:
-   *     summary: 取消定时任务
-   *     description: 取消定时任务
+   *     summary: 启动定时任务1
+   *     description: 启动定时任务1
    *     tags:
-   *       - upload
+   *       - schedule
    *     operationId: cancelTaskDemo
    *     consumes:
    *       - application/json
@@ -26,19 +26,49 @@ class UploadController {
    *     security:
    *     - api_key: []
    */
-  static async cancelTaskDemo(ctx) {
-    scheduleTask.taskDemo.cancel();
-    ctx.success("该定时任务停止成功", result);
+   static async startTaskOne(ctx) {
+    scheduleTask.taskOne();
+    ctx.success("该定时任务启动成功");
   }
 
   /**
    * @swagger
-   * /service-schedule/api/v1/cancel/taskDemo2:
+   * /service-schedule/api/v1/stop/task/one:
    *   get:
-   *     summary: 取消定时任务
-   *     description: 取消定时任务
+   *     summary: 停止定时任务1
+   *     description: 停止定时任务1
    *     tags:
-   *       - upload
+   *       - schedule
+   *     operationId: cancelTaskDemo
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
+   */
+  static async stopTaskOne(ctx) {
+    scheduleTask.taskOne.cancel();
+    ctx.success("该定时任务停止成功");
+  }
+
+  /**
+   * @swagger
+   * /service-schedule/api/v1/start/task/two:
+   *   get:
+   *     summary: 启动定时任务2
+   *     description: 启动定时任务2
+   *     tags:
+   *       - schedule
    *     operationId: cancelTaskDemo2
    *     consumes:
    *       - application/json
@@ -56,10 +86,40 @@ class UploadController {
    *     security:
    *     - api_key: []
    */
-   static async cancelTaskDemo2(ctx) {
-    scheduleTask.taskDemo2.cancel();
-    ctx.success("该定时任务停止成功", result);
+   static async startTaskTwo(ctx) {
+    scheduleTask.taskTwo();
+    ctx.success("该定时任务启动成功");
+  }
+
+  /**
+   * @swagger
+   * /service-schedule/api/v1/stop/task/two:
+   *   get:
+   *     summary: 停止定时任务2
+   *     description: 停止定时任务2
+   *     tags:
+   *       - schedule
+   *     operationId: cancelTaskDemo2
+   *     consumes:
+   *       - application/json
+   *       - application/xml
+   *     produces:
+   *       - application/json
+   *       - application/xml
+   *     responses:
+   *       4000200:
+   *         description: 请求成功
+   *       4000500:
+   *         description: 请求失败
+   *       4000412:
+   *         description: 参数异常
+   *     security:
+   *     - api_key: []
+   */
+   static async stoplTaskTwo(ctx) {
+    scheduleTask.taskTwo.cancel();
+    ctx.success("该定时任务停止成功");
   }
 }
 
-module.exports = UploadController;
+module.exports = ScheduleController;

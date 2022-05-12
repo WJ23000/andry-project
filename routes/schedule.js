@@ -4,11 +4,16 @@ const ScheduleController = require("../controllers/schedule");
 
 router.prefix("/service-schedule/api/v1");
 
-// 取消定时任务-通过
-router.post("/cancel/taskDemo", ScheduleController.cancelTaskDemo);
+// 启动定时one-通过
+router.post("/start/task/one", ScheduleController.startTaskOne);
 
-// 取消定时任务2-通过
-router.post("/cancel/taskDemo2", ScheduleController.cancelTaskDemo2);
+// 取消定时one-通过
+router.post("/stop/task/one", ScheduleController.stopTaskOne);
 
+// 启动定时two-通过
+router.post("/start/task/two", ScheduleController.startTaskTwo);
+
+// 取消定时two-通过
+router.post("/stop/task/two", ScheduleController.stoplTaskTwo);
 
 module.exports = router;
