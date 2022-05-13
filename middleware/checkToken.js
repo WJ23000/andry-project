@@ -27,10 +27,10 @@ async function checkToken(ctx, next) {
         if (data.id && data.username) {
           await next();
         } else {
-          ctx.exception("token已过期，请重新登录！");
+          ctx.auth("token已过期，请重新登录！");
         }
       } else {
-        ctx.exception("token已过期，请重新登录！");
+        ctx.auth("token已过期，请重新登录！");
       }
     } else {
       ctx.exception("请检查headers是否设置authorization");

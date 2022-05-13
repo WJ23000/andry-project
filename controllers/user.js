@@ -43,7 +43,7 @@ class UserController {
         ctx.fail("创建用户失败", err);
       }
     } else {
-      ctx.exception("请检查参数是否正确！");
+      ctx.exception("请检查参数是否正确");
     }
   }
 
@@ -88,7 +88,7 @@ class UserController {
         ctx.fail("批量创建用户失败", err);
       }
     } else {
-      ctx.exception("请检查参数是否正确！");
+      ctx.exception("请检查参数是否正确");
     }
   }
 
@@ -183,7 +183,7 @@ class UserController {
         ctx.fail("编辑用户失败", err);
       }
     } else {
-      ctx.exception("请检查参数是否正确！");
+      ctx.exception("请检查参数是否正确");
     }
   }
 
@@ -228,7 +228,7 @@ class UserController {
         ctx.fail("批量编辑用户失败", err);
       }
     } else {
-      ctx.exception("请检查参数是否正确！");
+      ctx.exception("请检查参数是否正确");
     }
   }
 
@@ -277,7 +277,7 @@ class UserController {
         ctx.fail("删除失败", err);
       }
     } else {
-      ctx.exception("请检查参数是否正确！");
+      ctx.exception("请检查参数是否正确");
     }
   }
 
@@ -322,7 +322,7 @@ class UserController {
         ctx.fail("查询失败", err);
       }
     } else {
-      ctx.exception("用户id必传！");
+      ctx.exception("用户id必传");
     }
   }
 }

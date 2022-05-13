@@ -4,7 +4,7 @@ const cors = require("koa-cors");
 const koaBody = require("koa-body");
 const { koaSwagger } = require("../public/swagger-ui");
 const swagger = require("../middleware/swagger");
-const responseHandle = require("../middleware/responseHandle");
+const handle = require("../middleware/handle");
 const checkToken = require("../middleware/checkToken");
 const scheduleTask = require("../schedule/index");
 
@@ -15,7 +15,7 @@ class InitManager {
     InitManager.initCors();
     InitManager.initBody();
     InitManager.initSwagger();
-    InitManager.initResponseHandle();
+    InitManager.initHandle();
     InitManager.initCheckToken();
     InitManager.initLoadRouters();
   }
@@ -52,8 +52,8 @@ class InitManager {
   }
 
   // response返回处理
-  static initResponseHandle() {
-    InitManager.app.use(responseHandle());
+  static initHandle() {
+    InitManager.app.use(handle());
   }
 
   // 路由token校验
