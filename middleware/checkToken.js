@@ -9,11 +9,13 @@ const CommonModel = require("../modules/common");
 async function checkToken(ctx, next) {
   const url = ctx.url.split("?")[0];
   if (
+    url.includes("index") ||
     url.includes("login") ||
     url.includes("register") ||
     url.includes("update/pwd") ||
     url.includes("swagger") ||
-    url.includes("schedule")
+    url.includes("schedule") ||
+    url.includes("download")
   ) {
     await next();
   } else {

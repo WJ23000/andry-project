@@ -47,7 +47,7 @@ class UploadController {
       const suffix = file.name.split(".").pop();
       const fileName = `${onlyName}.${suffix}`;
       const filePath =
-        path.join(__dirname, "../public/upload/") + `/${fileName}`;
+        path.join(__dirname, "../public/upload/") + `${fileName}`;
       // 创建可写流
       const writeStream = fs.createWriteStream(filePath);
       // 可读流通过管道写入可写流
@@ -105,7 +105,7 @@ class UploadController {
         const fileName = `${onlyName}.${suffix}`;
         // 获取上传文件扩展名
         const filePath =
-          path.join(__dirname, "../public/upload/") + `/${fileName}`;
+          path.join(__dirname, "../public/upload/") + `${fileName}`;
         // 创建可写流
         const writeStream = fs.createWriteStream(filePath);
         // 可读流通过管道写入可写流

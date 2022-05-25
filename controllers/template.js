@@ -40,12 +40,19 @@ class TemplateController {
     const query = ctx.query;
     if (query.type) {
       const templateInfo = template[query.type];
-      console.log("dddd", templateInfo);
+      const userList = [
+        {
+          username: "test",
+          password: "123456",
+          age: 25,
+          sex: "男",
+        },
+      ];
       if (templateInfo) {
         const config = [
           {
             name: templateInfo.name,
-            data: [["test", "1234567"]], // 数据来源于数据库(二维数组结构)
+            data: [],
           },
         ];
         // 设置title
@@ -54,17 +61,23 @@ class TemplateController {
         const options = {
           "!cols": templateInfo.width,
         };
+        // json数据中对象的值转换成数组添加到excel数据中
+        userList.forEach((item) => {
+          var arrInner = [];
+          arrInner.push(item.username);
+          arrInner.push(item.password);
+          arrInner.push(item.age);
+          arrInner.push(item.sex);
+          config[0].data.push(arrInner);
+        });
         const buffer = xlsx.build(config, options);
         const fileName = templateInfo.name + ".xlsx";
         const filePath =
-          path.join(__dirname, "../public/template/") + `/${fileName}`;
+          path.join(__dirname, "../public/template/") + `${fileName}`;
         fs.writeFileSync(filePath, buffer, (err) => {
-          if (err) {
-            ctx.fail("模板导出失败", err);
-          } else {
-            ctx.success("模板导出成功");
-          }
+          ctx.fail("模板导出失败", err);
         });
+        ctx.success("模板导出成功");
       } else {
         ctx.exception("文件不存在");
       }
@@ -108,16 +121,25 @@ class TemplateController {
     // 获取模板文件
     const file = ctx.request.files.file;
     if (file) {
-      // 获取上传文件扩展名生成文件名
-      const fileName = file.name;
-      if (!validate.validateExcel(fileName)) {
+      // 校验文件是否excel格式文件
+      const suffix = file.name.split(".").pop();
+      if (!validate.validateExcel(suffix)) {
         ctx.exception("请选择excel格式文件");
+        return;
       }
       const list = xlsx.parse(file.path);
-      const content = list[0].data;
-      content.splice(0, 1); // 删掉第一行title标题
-      console.log("文件内容", content);
-      // 转换二维数据为指定的json结构数据
+      const data = list[0].data;
+      data.splice(0, 1); // 删掉第一行title标题
+      console.log("转换前的Excel内容", data);
+      // 转换二维数组为指定的json结构数据存入数据库
+      let initArr = [];
+      for (let i = 0; i < data.length; i++) {
+        let obj = {};
+        obj.username = data[i][0];
+        obj.password = data[i][1];
+        initArr.push(obj);
+      }
+      ctx.success("模板导入成功", initArr);
     } else {
       ctx.exception("请选择上传文件");
     }

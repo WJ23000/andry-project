@@ -1,3 +1,5 @@
+const path = require("path");
+const send = require("koa-send");
 class DownloadController {
   /**
    * @swagger
@@ -15,11 +17,11 @@ class DownloadController {
    *       - application/json
    *       - application/xml
    *     parameters:
-   *       - name: file
-   *         in: formData
-   *         type: file
+   *       - name: name
+   *         in: query
+   *         type: string
    *         required: true
-   *         description: 单文件下载
+   *         description: 文件名
    *     responses:
    *       4000200:
    *         description: 请求成功
@@ -31,7 +33,18 @@ class DownloadController {
    *     - api_key: []
    */
   static async downloadFile(ctx) {
-    console.log("单文件下载");
+    const query = ctx.query;
+    if (query.name) {
+      var fileName = query.name;
+      // 设置实体头（表示消息体的附加信息的头字段）,提示浏览器以文件下载的方式打开
+      ctx.set("Content-Type", "application/octet-stream");
+      ctx.set("Content-Disposition", "attachment;filename=" + fileName);
+      const filePath = path.join(__dirname, "../public/images/");
+      ctx.attachment(fileName);
+      await send(ctx, fileName, { root: filePath });
+    } else {
+      ctx.exception("文件名必传");
+    }
   }
 
   /**
