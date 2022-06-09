@@ -14,8 +14,7 @@ async function checkToken(ctx, next) {
     url.includes("register") ||
     url.includes("update/pwd") ||
     url.includes("swagger") ||
-    url.includes("schedule") ||
-    url.includes("download")
+    url.includes("schedule")
   ) {
     await next();
   } else {

@@ -42,7 +42,7 @@ class TemplateController {
       const templateInfo = template[query.type];
       const userList = [
         {
-          username: "test",
+          username: "导出",
           password: "123456",
           age: 25,
           sex: "男",
@@ -137,6 +137,8 @@ class TemplateController {
         let obj = {};
         obj.username = data[i][0];
         obj.password = data[i][1];
+        obj.age = data[i][2];
+        obj.sex = data[i][3];
         initArr.push(obj);
       }
       ctx.success("模板导入成功", initArr);

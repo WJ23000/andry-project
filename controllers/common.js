@@ -44,7 +44,7 @@ class CommonController {
       // 密码加密
       data.password = bcryptjs.hashSync(data.password, 10);
       try {
-        const result = await CommonModel.register(data)
+        const result = await CommonModel.register(data);
         delete result.password;
         ctx.success("注册成功", result);
       } catch (err) {
@@ -103,7 +103,7 @@ class CommonController {
       }
       try {
         data.password = isRegisterUser.password; // 加密后的密码
-        const user = await CommonModel.login(data)
+        const user = await CommonModel.login(data);
         delete user.password;
         // 存储token到redis之前将已存在的token移入黑名单
         const oldToken = await redis.get(data.username);
@@ -200,7 +200,7 @@ class CommonController {
         return;
       }
       try {
-        const result = await CommonModel.updatePwd(data)
+        const result = await CommonModel.updatePwd(data);
         delete result.password;
         ctx.success("修改密码成功", result);
       } catch (err) {
