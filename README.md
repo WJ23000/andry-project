@@ -1,21 +1,25 @@
-# andry-app
+# andry-project
 
 ## Project setup
+
 ```
 npm install
 ```
 
 ### Compiles and hot-reloads for development
+
 ```
 npm start
 ```
 
 ### Compiles and minifies for production
+
 ```
 npm run build
 ```
 
-### pm2进程管理常用命令
+### pm2 进程管理常用命令
+
 ```
 1、启动进程/应用：pm2 start bin/www 或 pm2 start app.js
 2、指定名称启动进程/应用：pm2 start bin/www --name andry
@@ -33,21 +37,18 @@ npm run build
 14、重新启动所有进程/应用：pm2 restart all
 ```
 
-### 前端使用token
+### 前端使用 token
+
 ```
 设置Headers的authorization = 'Bearer ' + ${token}(登录接口会返回，Bearer后面加一个空格)
 ```
 
-### github太慢，hosts配置
+### github 太慢
+
 ```
-140.82.112.4 github.com
-199.232.69.194 github.global.ssl.fastly.net
-185.199.108.153 assets-cdn.github.com
-185.199.110.153 assets-cdn.github.com
-185.199.111.153 assets-cdn.github.com
+使用steam++
 ```
 
 ### Customize configuration
+
 See [Configuration Reference](https://cli.vuejs.org/config/).
-
-
