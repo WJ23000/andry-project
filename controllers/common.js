@@ -38,14 +38,14 @@ class CommonController {
     if (data.username && data.password) {
       const isRegisterUser = await CommonModel.isRegisterUser(data);
       if (isRegisterUser) {
-        ctx.exception("用户已存在");
+        ctx.exception("用户已存在", isRegisterUser);
         return;
       }
       // 密码加密
       data.password = bcryptjs.hashSync(data.password, 10);
       try {
         const result = await CommonModel.register(data);
-        delete result.password;
+        delete result.password; // 不生效待处理
         ctx.success("注册成功", result);
       } catch (err) {
         ctx.fail("注册失败", err);
@@ -106,13 +106,13 @@ class CommonController {
         const user = await CommonModel.login(data);
         delete user.password;
         // 存储token到redis之前将已存在的token移入黑名单
-        const oldToken = await redis.get(data.username);
+        const oldToken = await redis.get("auth:" + data.username);
         if (oldToken) {
-          await CommonModel.createToken("Bearer " + oldToken);
+          await CommonModel.createToken("Bearer " + oldToken); // 待优化
         }
         // 生成新token
         const accessToken = await token.sign(user);
-        await redis.set(data.username, accessToken);
+        await redis.set("auth:" + data.username, accessToken);
         const result = {
           token: accessToken,
           data: user,
@@ -237,12 +237,12 @@ class CommonController {
     if (oldToken) {
       try {
         // 将传入token移入黑名单
-        await CommonModel.createToken(oldToken);
+        await CommonModel.createToken(oldToken); // 待优化
         // 生成新token
         const user = await token.verify(oldToken);
         const accessToken = await token.sign(user);
         // 存储新token到redis
-        redis.set(user.username, accessToken);
+        await redis.set("auth:" + data.username, accessToken);
         ctx.success("刷新成功", accessToken);
       } catch (err) {
         ctx.fail("刷新失败", err);

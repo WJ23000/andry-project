@@ -5,6 +5,6 @@ router.prefix("/service-download/api/v1");
 // 单文件下载-通过
 router.get("/download/file", DownloadController.downloadFile);
 // 多文件下载-待验证
-router.get("/download/files", DownloadController.downloadFiles);
+router.post("/download/files", DownloadController.downloadFiles);
 
 module.exports = router;

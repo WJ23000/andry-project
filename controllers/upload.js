@@ -94,6 +94,7 @@ class UploadController {
   static async uploadFiles(ctx) {
     // 获取上传文件
     const files = ctx.request.files.file;
+    const result = [];
     if (files) {
       for (let file of files) {
         // 生成唯一的命名
@@ -111,9 +112,9 @@ class UploadController {
         // 可读流通过管道写入可写流
         reader.pipe(writeStream);
         // 上传到七牛云
-        await uploadToQiniu(reader, fileName);
+        result.push(await uploadToQiniu(reader, fileName));
+        ctx.success("上传成功", result);
       }
-      ctx.success("上传成功");
     } else {
       ctx.exception("请选择上传文件");
     }

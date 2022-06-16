@@ -1,6 +1,6 @@
 module.exports = function (sequelize, DataTypes) {
   return sequelize.define(
-    "token_blacklist",
+    "token_hit_list",
     {
       id: {
         type: DataTypes.INTEGER,
@@ -13,10 +13,10 @@ module.exports = function (sequelize, DataTypes) {
         type: DataTypes.STRING,
         allowNull: true,
         field: "token",
-      }
+      },
     },
     {
-      tableName: "token_blacklist",
+      tableName: "token_hit_list",
       timestamps: false,
       /**
        * 如果为true，则表示名称和model相同，即表名

@@ -5,7 +5,7 @@ const db = require("../config/db");
 const sequelize = db.sequelize;
 // 引入数据表模型
 const user = require("../schema/user")(sequelize, DataTypes);
-const token_blacklist = require("../schema/token_blacklist")(
+const token_hit_list = require("../schema/token_hit_list")(
   sequelize,
   DataTypes
 );
@@ -58,7 +58,7 @@ class CommonModel {
    * @returns {Promise<Model>}
    */
   static async createToken(token) {
-    return await token_blacklist.create({
+    return await token_hit_list.create({
       token,
     });
   }
@@ -72,7 +72,7 @@ class CommonModel {
     return await user.update(
       {
         username: data.username,
-        password: data.password
+        password: data.password,
       },
       {
         where: {
@@ -88,7 +88,7 @@ class CommonModel {
    * @returns {Promise<Model>}
    */
   static async queryToken(token) {
-    return await token_blacklist.findOne({
+    return await token_hit_list.findOne({
       where: {
         token,
       },

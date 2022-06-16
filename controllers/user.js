@@ -1,3 +1,5 @@
+const bcryptjs = require("bcryptjs");
+const CommonModel = require("../modules/common");
 const UserModel = require("../modules/user");
 class UserController {
   /**
@@ -33,11 +35,18 @@ class UserController {
    */
   static async createUser(ctx) {
     const data = ctx.request.body;
-    if (data.username && data.password || data.age || data.sex) {
+    if ((data.username && data.password) || data.age || data.sex) {
+      const isRegisterUser = await CommonModel.isRegisterUser(data);
+      if (isRegisterUser) {
+        ctx.exception("用户已存在");
+        return;
+      }
+      // 密码加密
+      data.password = bcryptjs.hashSync(data.password, 10);
       try {
         // 创建用户
         const result = await UserModel.createUser(data);
-        ctx.response.status = 200;
+        delete result.password; // 不生效待处理
         ctx.success("创建用户成功", result);
       } catch (err) {
         ctx.fail("创建用户失败", err);
@@ -82,6 +91,18 @@ class UserController {
     const data = ctx.request.body;
     if (data.length > 0) {
       try {
+        data.forEach(async (item) => {
+          console.log("触发了么", item);
+          const isRegisterUser = await CommonModel.isRegisterUser(item);
+          if (isRegisterUser) {
+            ctx.exception("用户已存在");
+            return;
+          }
+        });
+        data.forEach((item) => {
+          // 密码加密
+          item.password = bcryptjs.hashSync(item.password, 10);
+        });
         const result = await UserModel.createUserBatch(data);
         ctx.success("批量创建用户成功", result);
       } catch (err) {
@@ -175,7 +196,7 @@ class UserController {
    */
   static async updateUser(ctx) {
     const data = ctx.request.body;
-    if (data.id && data.username && data.password || data.age || data.sex) {
+    if ((data.id && data.username && data.password) || data.age || data.sex) {
       try {
         const result = await UserModel.updateUser(data);
         ctx.success("编辑用户成功", result);
@@ -207,7 +228,9 @@ class UserController {
    *         in: body
    *         required: true
    *         schema:
-   *           $ref: '#/definitions/user'
+   *           type: array
+   *           items:
+   *             $ref: '#/definitions/user'
    *     responses:
    *       4000200:
    *         description: 请求成功
@@ -248,11 +271,13 @@ class UserController {
    *       - application/json
    *       - application/xml
    *     parameters:
-   *       - name: body
+   *       - name: ids
    *         in: body
    *         required: true
    *         schema:
-   *           $ref: '#/definitions/user'
+   *           type: array
+   *           items:
+   *              $ref: ''
    *     responses:
    *       4000200:
    *         description: 请求成功

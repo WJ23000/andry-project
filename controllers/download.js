@@ -1,5 +1,7 @@
+const fs = require("fs");
 const path = require("path");
 const send = require("koa-send");
+const archiver = require("archiver");
 class DownloadController {
   /**
    * @swagger
@@ -17,7 +19,7 @@ class DownloadController {
    *       - application/json
    *       - application/xml
    *     parameters:
-   *       - name: name
+   *       - name: fileName
    *         in: query
    *         type: string
    *         required: true
@@ -34,8 +36,8 @@ class DownloadController {
    */
   static async downloadFile(ctx) {
     const query = ctx.query;
-    if (query.name) {
-      var fileName = query.name;
+    if (query.fileName) {
+      const fileName = query.fileName;
       // 设置实体头（表示消息体的附加信息的头字段）,提示浏览器以文件下载的方式打开
       ctx.set("Content-Type", "application/octet-stream");
       ctx.set("Content-Disposition", "attachment;filename=" + fileName);
@@ -50,7 +52,7 @@ class DownloadController {
   /**
    * @swagger
    * /service-download/api/v1/download/files:
-   *   get:
+   *   post:
    *     summary: 多文件下载
    *     description: 多文件下载
    *     tags:
@@ -63,11 +65,13 @@ class DownloadController {
    *       - application/json
    *       - application/xml
    *     parameters:
-   *       - name: file
-   *         in: formData
-   *         type: file
+   *       - name: fileNameList
+   *         in: body
    *         required: true
-   *         description: 多文件下载
+   *         schema:
+   *           type: array
+   *           items:
+   *             $ref: ''
    *     responses:
    *       4000200:
    *         description: 请求成功
@@ -79,7 +83,29 @@ class DownloadController {
    *     - api_key: []
    */
   static async downloadFiles(ctx) {
-    console.log("多文件下载");
+    // 字符串转对象
+    const fileNameList = eval(ctx.request.body);
+    if (fileNameList.length > 0) {
+      // 创建可写流来写入数据，将压缩包保存到当前项目的目录下，并且压缩包名为test.zip
+      const writeFilePath = path.join(__dirname, "../public/download/");
+      const readFilePath = path.join(__dirname, "../public/images/");
+      const output = fs.createWriteStream(writeFilePath + "test.zip");
+      // 设置压缩等级
+      const archive = archiver("zip", { zlib: { level: 9 } });
+      // 建立管道连接
+      archive.pipe(output);
+      // 压缩指定文件
+      fileNameList.forEach((item) => {
+        // 读取当前目录下的文件
+        const stream = fs.createReadStream(readFilePath + item);
+        archive.append(stream, { name: item });
+      });
+      // 第五步，完成压缩
+      archive.finalize();
+      ctx.success("查询成功", result);
+    } else {
+      ctx.exception("文件名必传");
+    }
   }
 }
 

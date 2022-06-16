@@ -23,10 +23,11 @@ function handle() {
       };
     };
     // 参数异常
-    ctx.exception = (msg) => {
+    ctx.exception = (msg, data) => {
       ctx.body = {
         code: 4000412,
         msg: msg || "params-exception",
+        data: data || "",
       };
     };
     // 无访问权限
