@@ -1,4 +1,4 @@
-const scheduleTask = require("../schedule/index");
+const { taskOne, taskTwo } = require("../schedule/index");
 
 class ScheduleController {
   /**
@@ -26,7 +26,7 @@ class ScheduleController {
    *     security:
    *     - api_key: []
    */
-   static async startTaskOne(ctx) {
+  static async startTaskOne(ctx) {
     scheduleTask.taskOne();
     ctx.success("该定时任务启动成功");
   }
@@ -57,7 +57,7 @@ class ScheduleController {
    *     - api_key: []
    */
   static async stopTaskOne(ctx) {
-    scheduleTask.taskOne.cancel();
+    taskOne.cancel();
     ctx.success("该定时任务停止成功");
   }
 
@@ -86,7 +86,7 @@ class ScheduleController {
    *     security:
    *     - api_key: []
    */
-   static async startTaskTwo(ctx) {
+  static async startTaskTwo(ctx) {
     scheduleTask.taskTwo();
     ctx.success("该定时任务启动成功");
   }
@@ -116,8 +116,8 @@ class ScheduleController {
    *     security:
    *     - api_key: []
    */
-   static async stoplTaskTwo(ctx) {
-    scheduleTask.taskTwo.cancel();
+  static async stoplTaskTwo(ctx) {
+    taskTwo.cancel();
     ctx.success("该定时任务停止成功");
   }
 }
